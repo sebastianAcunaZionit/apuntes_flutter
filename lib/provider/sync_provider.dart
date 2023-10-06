@@ -53,7 +53,9 @@ class SyncProv extends _$SyncProv {
     }
   }
 
-  void startDownload() async {}
+  void startDownload() async {
+    state = state.copyWith(syncStatus: SyncStatus.downloading);
+  }
 }
 
 enum SyncStatus { none, uploading, uploaded, downloading, donwloaded, errored }
