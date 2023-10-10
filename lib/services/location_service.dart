@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:apuntes/errors/custom_error.dart';
 import 'package:apuntes/provider/location_provider.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -17,16 +20,26 @@ class LocationService {
     return LocationStatus.denied;
   }
 
-  Future<void> requestPermission() async {
-    await Geolocator.requestPermission();
+  Future<LocationStatus> requestPermission() async {
+    final permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.whileInUse ||
+        permission == LocationPermission.always) {
+      return LocationStatus.accepted;
+    }
+
+    return LocationStatus.denied;
   }
 
-  Stream<Position> getLocation() async* {
-    final locationSettings = _getAndroidSettins();
-    yield* Geolocator.getPositionStream(locationSettings: locationSettings);
-  }
-
-  LocationSettings _getAndroidSettins() {
-    return AndroidSettings(intervalDuration: const Duration(seconds: 10));
+  Future<Position> getLocation() async {
+    try {
+      final position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.best);
+      return position;
+    } on TimeoutException catch (e) {
+      throw CustomError("no se pudo obtener la locacion ${e.message}");
+    } catch (e) {
+      throw CustomError("error no controlado");
+    }
   }
 }

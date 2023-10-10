@@ -18,6 +18,7 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
   void initState() {
     super.initState();
     Future(() => ref.read(locationProvProvider.notifier).onCheckStatus());
+    Future(() => ref.read(locationProvProvider.notifier).onLocationService());
   }
 
   @override
@@ -31,6 +32,11 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
     final colors = Theme.of(context).colorScheme;
 
     print("render note_screen");
+
+    if (ref.watch(locationProvProvider).locationStatus ==
+        LocationStatus.requesting) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     if (ref.watch(locationProvProvider).locationStatus !=
         LocationStatus.accepted) {
@@ -105,9 +111,9 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
               children: [
                 const SizedBox(height: 10),
                 CustomTextFormField(
+                  color: colors.surfaceVariant,
                   label: 'Ingrese nombre',
                   prefixIcon: const Icon(Icons.person),
-                  color: colors.onPrimary,
                   onChanged: (value) =>
                       ref.read(noteFormProvider.notifier).onChangeName(value),
                   errorMessage: ref.watch(noteFormProvider).name.errorMessage,
@@ -115,7 +121,7 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
                 const SizedBox(height: 40),
                 CustomTextFormField(
                   label: 'Ingrese apunte',
-                  color: colors.onPrimary,
+                  color: colors.surfaceVariant,
                   maxLines: 15,
                   keyboardType: TextInputType.multiline,
                   onChanged: (value) =>

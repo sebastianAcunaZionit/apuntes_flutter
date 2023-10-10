@@ -68,8 +68,8 @@ class NoteFormState {
   final NoteFormStatus status;
 
   NoteFormState({
-    this.name = const StringInput.dirty(""),
-    this.note = const StringInput.dirty(""),
+    this.name = const StringInput.pure(),
+    this.note = const StringInput.pure(),
     this.isFormValid = true,
     this.errorMessage = "",
     this.status = NoteFormStatus.none,

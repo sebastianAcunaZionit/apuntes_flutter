@@ -81,7 +81,7 @@ class LoginScreen extends ConsumerWidget {
                   child: const Text('descargar usuarios'),
                 ),
                 const SizedBox(height: 35),
-                Text("Powered by Zionit",
+                Text("Powered by ZionIT",
                     style: TextStyle(color: colors.secondaryContainer))
               ],
             ),

@@ -26,9 +26,11 @@ class NoteDatasource {
     return isar.notes.filter().idEqualTo(id).findFirst();
   }
 
-  Future<List<Note>> findNotes() async {
+  Future<List<Note>> findNotes({int offset = 0, int limit = 15}) async {
     final isar = await db;
-    return isar.notes.where().findAll();
+    final response =
+        await isar.notes.where().offset(offset).limit(limit).findAll();
+    return response;
   }
 
   Future<List<Note>> findNotesToSync() async {

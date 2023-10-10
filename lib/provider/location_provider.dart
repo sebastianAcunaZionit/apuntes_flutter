@@ -13,26 +13,35 @@ class LocationProv extends _$LocationProv {
   }
 
   void onRequestPermissions() async {
-    print('solicitar persmiso');
     await locationService.requestPermission();
   }
 
+  onLocationService() async {
+    final position = await locationService.getLocation();
+
+    state = state.copyWith(
+      latitude: position.latitude.toString(),
+      longitude: position.longitude.toString(),
+    );
+  }
+
   void onCheckStatus() async {
+    state = state.copyWith(locationStatus: LocationStatus.requesting);
     if (!await locationService.isLocationEnabled()) {
       state = state.copyWith(locationStatus: LocationStatus.denied);
       return;
     }
 
-    final status = await locationService.checkPermission();
+    LocationStatus status = await locationService.checkPermission();
 
     if (status == LocationStatus.denied) {
-      locationService.requestPermission();
+      status = await locationService.requestPermission();
     }
     state = state.copyWith(locationStatus: status);
   }
 }
 
-enum LocationStatus { accepted, denied, forbidden, none }
+enum LocationStatus { accepted, denied, requesting, forbidden, none }
 
 class LocationState {
   final LocationStatus locationStatus;
