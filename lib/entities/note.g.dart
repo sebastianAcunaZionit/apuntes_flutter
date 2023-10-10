@@ -52,6 +52,21 @@ const NoteSchema = CollectionSchema(
       name: r'syncState',
       type: IsarType.byte,
       enumMap: _NotesyncStateEnumValueMap,
+    ),
+    r'updatedAt': PropertySchema(
+      id: 7,
+      name: r'updatedAt',
+      type: IsarType.dateTime,
+    ),
+    r'updatedBy': PropertySchema(
+      id: 8,
+      name: r'updatedBy',
+      type: IsarType.long,
+    ),
+    r'updatedCoordenates': PropertySchema(
+      id: 9,
+      name: r'updatedCoordenates',
+      type: IsarType.stringList,
     )
   },
   estimateSize: _noteEstimateSize,
@@ -84,6 +99,13 @@ int _noteEstimateSize(
   bytesCount += 3 + object.id.length * 3;
   bytesCount += 3 + object.name.length * 3;
   bytesCount += 3 + object.note.length * 3;
+  bytesCount += 3 + object.updatedCoordenates.length * 3;
+  {
+    for (var i = 0; i < object.updatedCoordenates.length; i++) {
+      final value = object.updatedCoordenates[i];
+      bytesCount += value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -100,6 +122,9 @@ void _noteSerialize(
   writer.writeString(offsets[4], object.name);
   writer.writeString(offsets[5], object.note);
   writer.writeByte(offsets[6], object.syncState.index);
+  writer.writeDateTime(offsets[7], object.updatedAt);
+  writer.writeLong(offsets[8], object.updatedBy);
+  writer.writeStringList(offsets[9], object.updatedCoordenates);
 }
 
 Note _noteDeserialize(
@@ -118,6 +143,9 @@ Note _noteDeserialize(
     note: reader.readString(offsets[5]),
     syncState: _NotesyncStateValueEnumMap[reader.readByteOrNull(offsets[6])] ??
         SyncState.sync,
+    updatedAt: reader.readDateTime(offsets[7]),
+    updatedBy: reader.readLongOrNull(offsets[8]) ?? 0,
+    updatedCoordenates: reader.readStringList(offsets[9]) ?? const [],
   );
   return object;
 }
@@ -144,6 +172,12 @@ P _noteDeserializeProp<P>(
     case 6:
       return (_NotesyncStateValueEnumMap[reader.readByteOrNull(offset)] ??
           SyncState.sync) as P;
+    case 7:
+      return (reader.readDateTime(offset)) as P;
+    case 8:
+      return (reader.readLongOrNull(offset) ?? 0) as P;
+    case 9:
+      return (reader.readStringList(offset) ?? const []) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -1068,6 +1102,337 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtEqualTo(
+      DateTime value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'updatedAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtGreaterThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'updatedAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtLessThan(
+    DateTime value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'updatedAt',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedAtBetween(
+    DateTime lower,
+    DateTime upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'updatedAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedByEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'updatedBy',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedByGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'updatedBy',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedByLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'updatedBy',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedByBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'updatedBy',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'updatedCoordenates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'updatedCoordenates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'updatedCoordenates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'updatedCoordenates',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'updatedCoordenates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'updatedCoordenates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementContains(String value,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'updatedCoordenates',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementMatches(String pattern,
+          {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'updatedCoordenates',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'updatedCoordenates',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'updatedCoordenates',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'updatedCoordenates',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition> updatedCoordenatesIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'updatedCoordenates',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'updatedCoordenates',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'updatedCoordenates',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'updatedCoordenates',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterFilterCondition>
+      updatedCoordenatesLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'updatedCoordenates',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
 }
 
 extension NoteQueryObject on QueryBuilder<Note, Note, QFilterCondition> {}
@@ -1144,6 +1509,30 @@ extension NoteQuerySortBy on QueryBuilder<Note, Note, QSortBy> {
   QueryBuilder<Note, Note, QAfterSortBy> sortBySyncStateDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'syncState', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedBy() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedBy', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> sortByUpdatedByDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedBy', Sort.desc);
     });
   }
 }
@@ -1232,6 +1621,30 @@ extension NoteQuerySortThenBy on QueryBuilder<Note, Note, QSortThenBy> {
       return query.addSortBy(r'syncState', Sort.desc);
     });
   }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedAtDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedAt', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedBy() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedBy', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Note, Note, QAfterSortBy> thenByUpdatedByDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'updatedBy', Sort.desc);
+    });
+  }
 }
 
 extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
@@ -1277,6 +1690,24 @@ extension NoteQueryWhereDistinct on QueryBuilder<Note, Note, QDistinct> {
   QueryBuilder<Note, Note, QDistinct> distinctBySyncState() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'syncState');
+    });
+  }
+
+  QueryBuilder<Note, Note, QDistinct> distinctByUpdatedAt() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updatedAt');
+    });
+  }
+
+  QueryBuilder<Note, Note, QDistinct> distinctByUpdatedBy() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updatedBy');
+    });
+  }
+
+  QueryBuilder<Note, Note, QDistinct> distinctByUpdatedCoordenates() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'updatedCoordenates');
     });
   }
 }
@@ -1327,6 +1758,25 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
   QueryBuilder<Note, SyncState, QQueryOperations> syncStateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'syncState');
+    });
+  }
+
+  QueryBuilder<Note, DateTime, QQueryOperations> updatedAtProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updatedAt');
+    });
+  }
+
+  QueryBuilder<Note, int, QQueryOperations> updatedByProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updatedBy');
+    });
+  }
+
+  QueryBuilder<Note, List<String>, QQueryOperations>
+      updatedCoordenatesProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'updatedCoordenates');
     });
   }
 }

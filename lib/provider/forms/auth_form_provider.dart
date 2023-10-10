@@ -28,14 +28,6 @@ class AuthForm extends _$AuthForm {
       return;
     }
 
-    ref.read(authProvider.notifier).authenticate(User(
-        isarId: null,
-        id: 2,
-        email: 'sacuna@zionit.cl',
-        userName: 'sacuna',
-        fullName: 'Sebastian Acuna'));
-    return;
-
     final user = await userRepo.getUserByEmail(state.email.value);
     if (user == null) {
       state = state.copyWith(
@@ -43,6 +35,8 @@ class AuthForm extends _$AuthForm {
           errorMessage: "Usuario no encontrado");
       return;
     }
+
+    ref.read(authProvider.notifier).authenticate(user);
   }
 
   onChangeStatus(AuthFormStatus status) {

@@ -1,6 +1,5 @@
 import 'package:apuntes/datasource/note_datasource.dart';
 import 'package:apuntes/entities/note.dart';
-import 'package:isar/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'home_provider.g.dart';

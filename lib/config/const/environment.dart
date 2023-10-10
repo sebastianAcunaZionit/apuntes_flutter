@@ -8,4 +8,5 @@ class Environment {
   static String tokenKey = dotenv.get('JWT_KEY');
   static String apiUrl = dotenv.get('API_URL');
   static String apkVersion = dotenv.get('APK_VERSION');
+  static String tokenName = "TOKEN_APUNTES";
 }

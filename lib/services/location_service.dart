@@ -33,8 +33,7 @@ class LocationService {
 
   Future<Position> getLocation() async {
     try {
-      final position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.best);
+      final position = await Geolocator.getCurrentPosition();
       return position;
     } on TimeoutException catch (e) {
       throw CustomError("no se pudo obtener la locacion ${e.message}");

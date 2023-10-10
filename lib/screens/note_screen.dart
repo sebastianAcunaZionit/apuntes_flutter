@@ -1,13 +1,16 @@
+import 'package:apuntes/config/router/app_router.dart';
 import 'package:apuntes/provider/forms/note_form_provider.dart';
+import 'package:apuntes/provider/home_provider.dart';
 import 'package:apuntes/provider/location_provider.dart';
+import 'package:apuntes/provider/note_provider.dart';
 import 'package:apuntes/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class NoteScreen extends ConsumerStatefulWidget {
-  const NoteScreen({super.key});
+  final String uid;
+  const NoteScreen({super.key, required this.uid});
 
   @override
   NoteScreenState createState() => NoteScreenState();
@@ -18,12 +21,8 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
   void initState() {
     super.initState();
     Future(() => ref.read(locationProvProvider.notifier).onCheckStatus());
-    Future(() => ref.read(locationProvProvider.notifier).onLocationService());
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    // Future(() => ref.read(locationProvProvider.notifier).onLocationService());
+    Future(() => ref.read(noteProvProvider.notifier).loadData(widget.uid));
   }
 
   @override
@@ -33,6 +32,7 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
 
     print("render note_screen");
 
+    print(ref.watch(noteProvProvider));
     if (ref.watch(locationProvProvider).locationStatus ==
         LocationStatus.requesting) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -68,7 +68,7 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
                     child: const Text('solicitar permisos')),
                 const SizedBox(height: 10),
                 TextButton(
-                    onPressed: () => context.go('/'),
+                    onPressed: () => ref.read(appRouterProvider).go('/'),
                     child: const Text('ir a inicio'))
               ],
             ),
@@ -79,60 +79,70 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
 
     ref.listen(noteFormProvider, (previous, next) {
       if (next.status == NoteFormStatus.saved) {
-        context.go('/');
+        ref.invalidate(getListProvider);
+        ref.read(appRouterProvider).go('/');
       }
     });
 
-    return WillPopScope(
+    return /* WillPopScope(
       onWillPop: () async {
         if (ref.read(noteFormProvider).status != NoteFormStatus.none) {
           return false;
         }
         return true;
       },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Nuevo apunte'),
-          actions: [
-            TextButton(
-              onPressed:
-                  (ref.watch(noteFormProvider).status != NoteFormStatus.none)
-                      ? null
-                      : () => ref.read(noteFormProvider.notifier).onSubmit(),
-              child: const Text('Guardar'),
-            ),
-          ],
-        ),
-        body: SafeArea(
-            child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                CustomTextFormField(
-                  color: colors.surfaceVariant,
-                  label: 'Ingrese nombre',
-                  prefixIcon: const Icon(Icons.person),
-                  onChanged: (value) =>
-                      ref.read(noteFormProvider.notifier).onChangeName(value),
-                  errorMessage: ref.watch(noteFormProvider).name.errorMessage,
-                ),
-                const SizedBox(height: 40),
-                CustomTextFormField(
-                  label: 'Ingrese apunte',
-                  color: colors.surfaceVariant,
-                  maxLines: 15,
-                  keyboardType: TextInputType.multiline,
-                  onChanged: (value) =>
-                      ref.read(noteFormProvider.notifier).onChangeNote(value),
-                  errorMessage: ref.watch(noteFormProvider).note.errorMessage,
-                )
-              ],
-            ),
+      child: */
+        Scaffold(
+      appBar: AppBar(
+        title: const Text('Nuevo apunte'),
+        actions: [
+          TextButton(
+            onPressed: (ref.watch(noteFormProvider).status !=
+                    NoteFormStatus.none)
+                ? null
+                : () {
+                    final data = ref.read(noteFormProvider.notifier).onSubmit();
+                    if (data == null) return;
+                    Future(() => ref
+                        .read(noteProvProvider.notifier)
+                        .onSave(data["name"], data["note"]));
+                  },
+            child: const Text('Guardar'),
           ),
-        )),
+        ],
       ),
-    );
+      body: SafeArea(
+          child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 32.0),
+          child: Column(
+            children: [
+              const SizedBox(height: 10),
+              CustomTextFormField(
+                color: colors.surfaceVariant,
+                label: 'Ingrese nombre',
+                prefixIcon: const Icon(Icons.person),
+                controller: ref.watch(noteFormProvider.notifier).controllerName,
+                onChanged: (value) =>
+                    ref.read(noteFormProvider.notifier).onChangeName(value),
+                errorMessage: ref.watch(noteFormProvider).name.errorMessage,
+              ),
+              const SizedBox(height: 40),
+              CustomTextFormField(
+                label: 'Ingrese apunte',
+                color: colors.surfaceVariant,
+                controller: ref.watch(noteFormProvider.notifier).controllerNote,
+                maxLines: 15,
+                keyboardType: TextInputType.multiline,
+                onChanged: (value) =>
+                    ref.read(noteFormProvider.notifier).onChangeNote(value),
+                errorMessage: ref.watch(noteFormProvider).note.errorMessage,
+              )
+            ],
+          ),
+        ),
+      )),
+    ); /* ,
+    ); */
   }
 }

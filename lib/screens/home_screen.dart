@@ -1,4 +1,7 @@
+import 'package:apuntes/config/router/app_router.dart';
+import 'package:apuntes/provider/forms/note_form_provider.dart';
 import 'package:apuntes/provider/home_provider.dart';
+import 'package:apuntes/provider/note_provider.dart';
 import 'package:apuntes/provider/sync_provider.dart';
 import 'package:apuntes/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +36,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     }
 
     final color = Theme.of(context).colorScheme;
+    final textStyle = Theme.of(context).textTheme;
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +59,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                       : const Text("Sincronizar")),
           IconButton(
               onPressed: () {
-                context.go('/login');
+                ref.read(appRouterProvider).go('/login');
               },
               icon: const Icon(Icons.logout_outlined)),
         ],
@@ -71,6 +75,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               itemBuilder: (context, index) {
                 final note = notesSync.value![index];
 
+                String dato =
+                    "aalskmdalksasdasdjknaskcjnakjsnckajsnckajnckajnckjasnckajsnckajsnckjasnckajsnc12312312312141231241234123dascascasawdawsacasc";
+
+                dato = (index % 2 == 0) ? note.note : dato;
+
                 return CustomContainer(
                   color: color.surfaceVariant,
                   borderVariant: BorderVariant.all,
@@ -78,17 +87,47 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                       const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(children: [
-                      Text(note.name),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ...note.coordenates
-                              .map((String coordenate) => Text("$coordenate "))
-                              .toList()
-                        ],
-                      )
-                    ]),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                note.name,
+                                style: textStyle.titleMedium,
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child:
+                                    Text(dato, overflow: TextOverflow.ellipsis),
+                              ),
+                              if (dato.length > 100) ...[
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(Icons.expand_more))
+                              ]
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                  onPressed: () {
+                                    ref.invalidate(noteFormProvider);
+                                    ref.invalidate(noteProvProvider);
+                                    ref
+                                        .read(appRouterProvider)
+                                        .push('/note/${note.id}');
+                                  },
+                                  child: const Text('EDITAR'))
+                            ],
+                          )
+                        ]),
                   ),
                 );
               },
@@ -98,7 +137,11 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       )),
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => context.push('/note'),
+          onPressed: () {
+            ref.invalidate(noteFormProvider);
+            ref.invalidate(noteProvProvider);
+            ref.read(appRouterProvider).push('/note/new');
+          },
           label: const Text('Nuevo elemento')),
     );
   }

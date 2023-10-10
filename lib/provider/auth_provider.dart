@@ -1,17 +1,70 @@
+import 'package:apuntes/config/const/environment.dart';
+import 'package:apuntes/config/const/jwt.dart';
+import 'package:apuntes/datasource/user_datasource.dart';
 import 'package:apuntes/entities/index.dart';
+import 'package:apuntes/services/key_value_storage_service_impl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
 part 'auth_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class Auth extends _$Auth {
+  final keyValueStorageService = KeyValueStorageServiceImpl();
+  final userRepo = UserDatasource();
+
   @override
   AuthState build() {
     return AuthState();
   }
 
-  authenticate(User user) {
-    state = state.copyWith(authStatus: AuthStatus.authenticated);
+  authenticate(User user) async {
+    final token = Jwt.sign(
+        {'username': user.userName, 'fullName': user.fullName, 'uid': user.id});
+
+    await keyValueStorageService.setKeyValue(Environment.tokenName, token);
+    state = state.copyWith();
+    Future.delayed(const Duration(seconds: 2));
+
+    state = state.copyWith(
+      user: user,
+      token: token,
+      authStatus: AuthStatus.authenticated,
+    );
+  }
+
+  Future<void> checkAuthStatus() async {
+    state = state.copyWith(authStatus: AuthStatus.authenticating);
+    final token =
+        await keyValueStorageService.getValue<String>(Environment.tokenName);
+    final tokenData = Jwt.verify(token ?? '');
+
+    if (!tokenData["ok"]) {
+      removeToken();
+      return;
+    }
+
+    final user = await userRepo.getUserById(tokenData["payload"]["uid"]);
+    if (user == null) {
+      removeToken();
+      return;
+    }
+
+    state = state.copyWith(
+        authStatus: AuthStatus.authenticated, user: user, token: token);
+
+    return;
+  }
+
+  void logout() {
+    removeToken();
+  }
+
+  void removeToken() async {
+    await keyValueStorageService.removeKey(Environment.tokenName);
+    state = state.copyWith(
+      authStatus: AuthStatus.notAuthenticated,
+      token: null,
+      user: null,
+    );
   }
 }
 

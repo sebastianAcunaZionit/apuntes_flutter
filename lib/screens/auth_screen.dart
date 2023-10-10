@@ -1,10 +1,11 @@
+import 'package:apuntes/config/router/app_router.dart';
 import 'package:apuntes/provider/auth_provider.dart';
 import 'package:apuntes/provider/forms/auth_form_provider.dart';
+import 'package:apuntes/provider/sync_provider.dart';
 import 'package:apuntes/widgets/custom_container.dart';
 import 'package:apuntes/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -17,10 +18,15 @@ class LoginScreen extends ConsumerWidget {
             .showSnackBar(SnackBar(content: Text(next.errorMessage)));
       }
     });
+    ref.listen(syncProvProvider, (previous, next) {
+      if (next.syncStatus == SyncStatus.errored) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(next.errorMessage)));
+      }
 
-    ref.listen(authProvider, (previous, next) {
-      if (next.authStatus == AuthStatus.authenticated) {
-        context.go('/');
+      if (next.syncStatus == SyncStatus.donwloaded) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Usuarios descargados con exito")));
       }
     });
 
@@ -77,9 +83,15 @@ class LoginScreen extends ConsumerWidget {
                   onPressed: ref.watch(authFormProvider).authFormStatus ==
                           AuthFormStatus.validating
                       ? null
-                      : () => ref.read(authFormProvider.notifier).onSubmit(),
+                      : () =>
+                          ref.read(syncProvProvider.notifier).startDownload(),
                   child: const Text('descargar usuarios'),
                 ),
+                if (ref.watch(syncProvProvider).syncStatus ==
+                    SyncStatus.downloading) ...[
+                  const SizedBox(height: 10),
+                  const CircularProgressIndicator(),
+                ],
                 const SizedBox(height: 35),
                 Text("Powered by ZionIT",
                     style: TextStyle(color: colors.secondaryContainer))

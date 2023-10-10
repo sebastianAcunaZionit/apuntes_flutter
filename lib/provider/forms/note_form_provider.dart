@@ -1,5 +1,5 @@
-import 'package:apuntes/provider/note_provider.dart';
 import 'package:apuntes/provider/validations/string_form.dart';
+import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -9,22 +9,23 @@ enum NoteFormStatus { saving, saved, none }
 
 @riverpod
 class NoteForm extends _$NoteForm {
+  final TextEditingController controllerName = TextEditingController();
+  final TextEditingController controllerNote = TextEditingController();
+
   @override
   NoteFormState build() {
     return NoteFormState();
   }
 
-  onSubmit() {
+  Map<String, dynamic>? onSubmit() {
     state = state.copyWith(status: NoteFormStatus.saving);
     _validate();
     if (!state.isFormValid) {
       state = state.copyWith(status: NoteFormStatus.none);
-      return;
+      return null;
     }
 
-    ref
-        .read(noteProvProvider.notifier)
-        .onSave(state.name.value, state.note.value);
+    return {'name': state.name.value, 'note': state.note.value};
   }
 
   changeStatus(NoteFormStatus status) {

@@ -11,8 +11,11 @@ class Note {
   final String name;
   final String note;
   final List<String> coordenates;
+  final List<String> updatedCoordenates;
   final DateTime createdAt;
   final int createdBy;
+  final DateTime updatedAt;
+  final int updatedBy;
   @enumerated
   final SyncState syncState;
 
@@ -25,5 +28,8 @@ class Note {
     required this.createdAt,
     required this.createdBy,
     required this.syncState,
+    this.updatedCoordenates = const [],
+    required this.updatedAt,
+    this.updatedBy = 0,
   });
 }
