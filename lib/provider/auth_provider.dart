@@ -30,8 +30,9 @@ class Auth extends _$Auth {
     );
   }
 
-  Future<void> checkAuthStatus() async {
+  checkAuthStatus() async {
     state = state.copyWith(authStatus: AuthStatus.authenticating);
+    await Future.delayed(const Duration(seconds: 2));
     final token =
         await keyValueStorageService.getValue<String>(Environment.tokenName);
     final tokenData = Jwt.verify(token ?? '');

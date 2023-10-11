@@ -17,7 +17,6 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
   @override
   void initState() {
     super.initState();
-    Future(() => ref.read(locationProvProvider.notifier).onCheckStatus());
     Future(() => ref.read(noteProvProvider.notifier).loadData(widget.uid));
   }
 
@@ -26,9 +25,9 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
     final textStyle = Theme.of(context).textTheme;
     final colors = Theme.of(context).colorScheme;
 
-    print("render note_screen");
+    // print("render note_screen");
 
-    print(ref.watch(noteProvProvider));
+    // print(ref.watch(noteProvProvider));
     if (ref.watch(locationProvProvider).locationStatus ==
         LocationStatus.requesting) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
