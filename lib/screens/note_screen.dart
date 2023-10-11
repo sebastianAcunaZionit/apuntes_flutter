@@ -21,7 +21,6 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
   void initState() {
     super.initState();
     Future(() => ref.read(locationProvProvider.notifier).onCheckStatus());
-    // Future(() => ref.read(locationProvProvider.notifier).onLocationService());
     Future(() => ref.read(noteProvProvider.notifier).loadData(widget.uid));
   }
 
@@ -79,7 +78,7 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
 
     ref.listen(noteFormProvider, (previous, next) {
       if (next.status == NoteFormStatus.saved) {
-        ref.invalidate(getListProvider);
+        ref.invalidate(homeProvProvider);
         ref.read(appRouterProvider).go('/');
       }
     });
@@ -94,21 +93,27 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
       child: */
         Scaffold(
       appBar: AppBar(
-        title: const Text('Nuevo apunte'),
+        title: Text((widget.uid == 'new') ? 'Nuevo apunte' : 'Editar apunte'),
         actions: [
-          TextButton(
-            onPressed: (ref.watch(noteFormProvider).status !=
-                    NoteFormStatus.none)
-                ? null
-                : () {
-                    final data = ref.read(noteFormProvider.notifier).onSubmit();
-                    if (data == null) return;
-                    Future(() => ref
-                        .read(noteProvProvider.notifier)
-                        .onSave(data["name"], data["note"]));
-                  },
-            child: const Text('Guardar'),
-          ),
+          if ((ref.watch(noteFormProvider).status == NoteFormStatus.saving))
+            const CircularProgressIndicator(),
+          if ((ref.watch(noteFormProvider).status != NoteFormStatus.saving))
+            TextButton(
+              onPressed:
+                  (ref.watch(noteFormProvider).status != NoteFormStatus.none)
+                      ? null
+                      : () {
+                          FocusScope.of(context).requestFocus(FocusNode());
+                          final data =
+                              ref.read(noteFormProvider.notifier).onSubmit();
+
+                          if (data == null) return;
+                          Future(() => ref
+                              .read(noteProvProvider.notifier)
+                              .onSave(data["name"], data["note"]));
+                        },
+              child: const Text('Guardar'),
+            ),
         ],
       ),
       body: SafeArea(
@@ -120,6 +125,8 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
               const SizedBox(height: 10),
               CustomTextFormField(
                 color: colors.surfaceVariant,
+                readOnly: (ref.watch(noteFormProvider).status ==
+                    NoteFormStatus.saving),
                 label: 'Ingrese nombre',
                 prefixIcon: const Icon(Icons.person),
                 controller: ref.watch(noteFormProvider.notifier).controllerName,
@@ -130,6 +137,8 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
               const SizedBox(height: 40),
               CustomTextFormField(
                 label: 'Ingrese apunte',
+                readOnly: (ref.watch(noteFormProvider).status ==
+                    NoteFormStatus.saving),
                 color: colors.surfaceVariant,
                 controller: ref.watch(noteFormProvider.notifier).controllerNote,
                 maxLines: 15,

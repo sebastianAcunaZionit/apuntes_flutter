@@ -6,7 +6,7 @@ part of 'home_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$getListHash() => r'91d44ab7a03a178c5b66648f0335ab18076bc88d';
+String _$getListHash() => r'9db1771d2e7b1f8b2be9a2d1622976777ae8207c';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -154,12 +154,12 @@ class _GetListProviderElement
   int get page => (origin as GetListProvider).page;
 }
 
-String _$homeProvHash() => r'eb898db1785a9fa377e920f9a73aeb0f0007f1a8';
+String _$homeProvHash() => r'19e688d1307915f93afaaeb0865e1c458e46fa52';
 
 /// See also [HomeProv].
 @ProviderFor(HomeProv)
 final homeProvProvider =
-    AutoDisposeNotifierProvider<HomeProv, HomeState>.internal(
+    AutoDisposeAsyncNotifierProvider<HomeProv, HomeState>.internal(
   HomeProv.new,
   name: r'homeProvProvider',
   debugGetCreateSourceHash:
@@ -168,6 +168,6 @@ final homeProvProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$HomeProv = AutoDisposeNotifier<HomeState>;
+typedef _$HomeProv = AutoDisposeAsyncNotifier<HomeState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

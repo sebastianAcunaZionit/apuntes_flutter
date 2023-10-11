@@ -26,10 +26,22 @@ class NoteDatasource {
     return isar.notes.filter().idEqualTo(id).findFirst();
   }
 
-  Future<List<Note>> findNotes({int offset = 0, int limit = 15}) async {
+  Future<List<Note>> findNotes({
+    int offset = 0,
+    int? limit,
+    String? name,
+  }) async {
     final isar = await db;
-    final response =
-        await isar.notes.where().offset(offset).limit(limit).findAll();
+
+    FilterCondition? filterCondition;
+    if (name != null) {
+      filterCondition = FilterCondition.contains(property: 'name', value: name);
+    }
+
+    final response = await isar.notes
+        .buildQuery<Note>(limit: limit, offset: offset, filter: filterCondition)
+        .findAll();
+
     return response;
   }
 
