@@ -1,4 +1,5 @@
 import 'package:apuntes/config/router/app_router.dart';
+import 'package:apuntes/entities/note.dart';
 import 'package:apuntes/provider/forms/note_form_provider.dart';
 import 'package:apuntes/provider/home_provider.dart';
 import 'package:apuntes/provider/note_provider.dart';
@@ -69,10 +70,10 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               actions: [
                 TextButton(
                     onPressed: () => ref.read(appRouterProvider).pop(),
-                    child: const Text('cancelar')),
+                    child: const Text('Cancelar')),
                 TextButton(
                     onPressed: () => setFilter(filterController.text),
-                    child: const Text('Guardar'))
+                    child: const Text('Filtrar'))
               ],
             );
           });
@@ -143,13 +144,8 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
-              itemCount: notes.length,
-              itemBuilder: (context, index) {
-                final note = notes[index];
-                return NoteItem(note: note);
-              },
-            )),
+              child: _NoteList(notes: notes),
+            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -189,6 +185,29 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
         label: const Text('Nuevo apunte'),
         icon: const Icon(Icons.note),
       ),
+    );
+  }
+}
+
+class _NoteList extends StatelessWidget {
+  const _NoteList({required this.notes});
+
+  final List<Note> notes;
+
+  @override
+  Widget build(BuildContext context) {
+    if (notes.isEmpty) {
+      return const Center(
+        child: Text('No se encontraron registros.'),
+      );
+    }
+
+    return ListView.builder(
+      itemCount: notes.length,
+      itemBuilder: (context, index) {
+        final note = notes[index];
+        return NoteItem(note: note);
+      },
     );
   }
 }

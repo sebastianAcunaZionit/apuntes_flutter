@@ -54,7 +54,7 @@ class NoteItemState extends ConsumerState<NoteItem> {
                         ? TextOverflow.visible
                         : TextOverflow.ellipsis),
               ),
-              if (widget.note.note.length > 100) ...[
+              if (widget.note.note.length > 50) ...[
                 IconButton(
                     onPressed: () => toggleExpanded(),
                     icon: Icon(
