@@ -2,7 +2,7 @@ import 'package:isar/isar.dart';
 
 part 'note.g.dart';
 
-enum SyncState { sync, pending }
+enum SyncDataStatus { sync, pending }
 
 @collection
 class Note {
@@ -17,7 +17,7 @@ class Note {
   final DateTime updatedAt;
   final int updatedBy;
   @enumerated
-  final SyncState syncState;
+  SyncDataStatus syncState;
 
   Note({
     required this.isarId,

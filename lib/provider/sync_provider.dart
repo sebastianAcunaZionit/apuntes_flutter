@@ -3,6 +3,7 @@ import 'package:apuntes/datasource/user_datasource.dart';
 import 'package:apuntes/entities/index.dart';
 import 'package:apuntes/errors/custom_error.dart';
 import 'package:apuntes/models/http_upload_request_model.dart';
+import 'package:apuntes/provider/auth_provider.dart';
 import 'package:apuntes/services/apis/descargar_datos.dart';
 import 'package:apuntes/services/apis/subir_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -27,14 +28,18 @@ class SyncProv extends _$SyncProv {
     try {
       final notes = await noteRepo.findNotesToSync();
 
+      if (notes.isEmpty) {
+        state = state.copyWith(
+            errorMessage: "Todo sincronizado", syncStatus: SyncStatus.uploaded);
+        await Future.delayed(const Duration(seconds: 2));
+
+        state = state.copyWith(errorMessage: "", syncStatus: SyncStatus.none);
+
+        return;
+      }
+
       final response = await uploadData.uploadData(HttpUploadRequestModel(
-          notes: notes,
-          user: User(
-              isarId: null,
-              id: 0,
-              fullName: "",
-              userName: "",
-              email: "sacuna@zionit.cl")));
+          notes: notes, user: ref.read(authProvider).user));
 
       if (!response.ok) {
         state = state.copyWith(
@@ -42,7 +47,11 @@ class SyncProv extends _$SyncProv {
         return;
       }
 
-      // ! updatear registros subidos
+      for (var note in notes) {
+        note.syncState = SyncDataStatus.sync;
+        await noteRepo.postNote(note);
+      }
+
       state = state.copyWith(
           errorMessage: response.message, syncStatus: SyncStatus.uploaded);
       await Future.delayed(const Duration(seconds: 2));

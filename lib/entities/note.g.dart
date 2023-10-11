@@ -142,7 +142,7 @@ Note _noteDeserialize(
     name: reader.readString(offsets[4]),
     note: reader.readString(offsets[5]),
     syncState: _NotesyncStateValueEnumMap[reader.readByteOrNull(offsets[6])] ??
-        SyncState.sync,
+        SyncDataStatus.sync,
     updatedAt: reader.readDateTime(offsets[7]),
     updatedBy: reader.readLongOrNull(offsets[8]) ?? 0,
     updatedCoordenates: reader.readStringList(offsets[9]) ?? const [],
@@ -171,7 +171,7 @@ P _noteDeserializeProp<P>(
       return (reader.readString(offset)) as P;
     case 6:
       return (_NotesyncStateValueEnumMap[reader.readByteOrNull(offset)] ??
-          SyncState.sync) as P;
+          SyncDataStatus.sync) as P;
     case 7:
       return (reader.readDateTime(offset)) as P;
     case 8:
@@ -188,8 +188,8 @@ const _NotesyncStateEnumValueMap = {
   'pending': 1,
 };
 const _NotesyncStateValueEnumMap = {
-  0: SyncState.sync,
-  1: SyncState.pending,
+  0: SyncDataStatus.sync,
+  1: SyncDataStatus.pending,
 };
 
 Id _noteGetId(Note object) {
@@ -1051,7 +1051,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
   }
 
   QueryBuilder<Note, Note, QAfterFilterCondition> syncStateEqualTo(
-      SyncState value) {
+      SyncDataStatus value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'syncState',
@@ -1061,7 +1061,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
   }
 
   QueryBuilder<Note, Note, QAfterFilterCondition> syncStateGreaterThan(
-    SyncState value, {
+    SyncDataStatus value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1074,7 +1074,7 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
   }
 
   QueryBuilder<Note, Note, QAfterFilterCondition> syncStateLessThan(
-    SyncState value, {
+    SyncDataStatus value, {
     bool include = false,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -1087,8 +1087,8 @@ extension NoteQueryFilter on QueryBuilder<Note, Note, QFilterCondition> {
   }
 
   QueryBuilder<Note, Note, QAfterFilterCondition> syncStateBetween(
-    SyncState lower,
-    SyncState upper, {
+    SyncDataStatus lower,
+    SyncDataStatus upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
@@ -1755,7 +1755,7 @@ extension NoteQueryProperty on QueryBuilder<Note, Note, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Note, SyncState, QQueryOperations> syncStateProperty() {
+  QueryBuilder<Note, SyncDataStatus, QQueryOperations> syncStateProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'syncState');
     });
