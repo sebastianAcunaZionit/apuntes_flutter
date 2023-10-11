@@ -37,7 +37,7 @@ class NoteDatasource {
     final isar = await db;
     return await isar.notes
         .filter()
-        .syncStateEqualTo(SyncState.pending)
+        .syncStateEqualTo(SyncDataStatus.pending)
         .findAll();
   }
 }

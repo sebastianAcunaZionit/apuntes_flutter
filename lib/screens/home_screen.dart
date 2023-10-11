@@ -4,6 +4,7 @@ import 'package:apuntes/provider/home_provider.dart';
 import 'package:apuntes/provider/note_provider.dart';
 import 'package:apuntes/provider/sync_provider.dart';
 import 'package:apuntes/widgets/custom_container.dart';
+import 'package:apuntes/widgets/note_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -74,62 +75,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               itemCount: notesSync.value!.length,
               itemBuilder: (context, index) {
                 final note = notesSync.value![index];
-
-                String dato =
-                    "aalskmdalksasdasdjknaskcjnakjsnckajsnckajnckajnckjasnckajsnckajsnckjasnckajsnc12312312312141231241234123dascascasawdawsacasc";
-
-                dato = (index % 2 == 0) ? note.note : dato;
-
-                return CustomContainer(
-                  color: color.surfaceVariant,
-                  borderVariant: BorderVariant.all,
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                note.name,
-                                style: textStyle.titleMedium,
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child:
-                                    Text(dato, overflow: TextOverflow.ellipsis),
-                              ),
-                              if (dato.length > 100) ...[
-                                IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.expand_more))
-                              ]
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                  onPressed: () {
-                                    ref.invalidate(noteFormProvider);
-                                    ref.invalidate(noteProvProvider);
-                                    ref
-                                        .read(appRouterProvider)
-                                        .push('/note/${note.id}');
-                                  },
-                                  child: const Text('EDITAR'))
-                            ],
-                          )
-                        ]),
-                  ),
-                );
+                return NoteItem(note: note);
               },
             )),
             const SizedBox(height: 70),

@@ -71,7 +71,7 @@ class NoteProv extends _$NoteProv {
           ? DateTime.now()
           : DateTime.parse(state.createdAt),
       createdBy: state.createdBy,
-      syncState: SyncState.pending,
+      syncState: SyncDataStatus.pending,
       updatedAt: DateTime.timestamp(),
       updatedBy: ref.read(authProvider).user?.id ?? 1,
     );
