@@ -1,5 +1,3 @@
-import 'package:apuntes/config/router/app_router.dart';
-import 'package:apuntes/provider/auth_provider.dart';
 import 'package:apuntes/provider/forms/auth_form_provider.dart';
 import 'package:apuntes/provider/sync_provider.dart';
 import 'package:apuntes/widgets/custom_container.dart';
