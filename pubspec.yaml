@@ -8,12 +8,14 @@ environment:
 
 dependencies:
   # app_settings: ^5.1.1
+  badges: ^3.1.2
   connectivity_plus: ^4.0.2
   dart_jsonwebtoken: ^2.12.0
   dio: ^5.3.3
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.1.0
+  flutter_launcher_icons: ^0.13.1
   flutter_riverpod: ^2.4.3
   formz: ^0.6.1
   geocoding: ^2.1.1
@@ -42,3 +44,11 @@ flutter:
 
   assets:
     - .env
+    - assets/icons/
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icons/notes-icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
