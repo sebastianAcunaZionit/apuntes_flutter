@@ -1,7 +1,7 @@
-import 'package:apuntes/errors/custom_error.dart';
-import 'package:apuntes/entities/note.dart';
-import 'package:apuntes/services/db_isar_service.dart';
 import 'package:isar/isar.dart';
+import 'package:apuntes/errors/custom_error.dart';
+import 'package:apuntes/entities/entities.dart';
+import 'package:apuntes/services/services.dart';
 
 class NoteDatasource {
   late Future<Isar> db;

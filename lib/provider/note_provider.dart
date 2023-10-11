@@ -1,11 +1,10 @@
-import 'package:apuntes/datasource/note_datasource.dart';
-import 'package:apuntes/entities/index.dart';
-import 'package:apuntes/provider/auth_provider.dart';
-import 'package:apuntes/provider/forms/note_form_provider.dart';
-import 'package:apuntes/provider/location_provider.dart';
-import 'package:isar/isar.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:isar/isar.dart';
 import 'package:uuid/uuid.dart';
+
+import 'package:apuntes/datasource/datasources.dart';
+import 'package:apuntes/entities/entities.dart';
+import 'package:apuntes/provider/providers.dart';
 
 part 'note_provider.g.dart';
 

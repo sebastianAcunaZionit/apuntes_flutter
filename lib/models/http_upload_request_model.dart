@@ -1,5 +1,5 @@
-import 'package:apuntes/entities/index.dart';
-import 'package:apuntes/mappers/note_mapper.dart';
+import 'package:apuntes/entities/entities.dart';
+import 'package:apuntes/mappers/mappers.dart';
 
 class HttpUploadRequestModel {
   final List<Note> notes;

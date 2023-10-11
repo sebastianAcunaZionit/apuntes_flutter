@@ -1,6 +1,6 @@
-import 'package:apuntes/entities/index.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:apuntes/entities/entities.dart';
 
 class IsarDBService {
   Future<Isar> openDB() async {

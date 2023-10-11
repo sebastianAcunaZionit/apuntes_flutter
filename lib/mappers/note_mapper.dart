@@ -1,4 +1,4 @@
-import 'package:apuntes/entities/index.dart';
+import 'package:apuntes/entities/entities.dart';
 
 class NoteMapper {
   static Map<String, dynamic> mapToRequest(Note note) {

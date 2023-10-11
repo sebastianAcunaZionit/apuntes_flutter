@@ -1,4 +1,4 @@
-import 'package:apuntes/config/const/environment.dart';
+import 'package:apuntes/config/configs.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class Jwt {

@@ -1,12 +1,9 @@
-import 'package:apuntes/config/router/app_router.dart';
-import 'package:apuntes/provider/forms/note_form_provider.dart';
-import 'package:apuntes/provider/home_provider.dart';
-import 'package:apuntes/provider/location_provider.dart';
-import 'package:apuntes/provider/note_provider.dart';
-import 'package:apuntes/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:apuntes/config/configs.dart';
+import 'package:apuntes/provider/providers.dart';
+import 'package:apuntes/widgets/widgets.dart';
 
 class NoteScreen extends ConsumerStatefulWidget {
   final String uid;

@@ -1,10 +1,7 @@
-import 'package:apuntes/provider/auth_provider.dart';
-import 'package:apuntes/screens/auth_screen.dart';
-import 'package:apuntes/screens/home_screen.dart';
-import 'package:apuntes/screens/note_screen.dart';
-import 'package:apuntes/screens/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:apuntes/provider/providers.dart';
+import 'package:apuntes/screens/screens.dart';
 
 part 'app_router.g.dart';
 

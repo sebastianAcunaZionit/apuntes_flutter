@@ -1,5 +1,5 @@
-import 'package:apuntes/entities/user.dart';
-import 'package:apuntes/mappers/user_mapper.dart';
+import 'package:apuntes/entities/entities.dart';
+import 'package:apuntes/mappers/mappers.dart';
 
 class HttpDownloadResponseModel {
   final List<dynamic> users;

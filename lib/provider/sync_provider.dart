@@ -1,12 +1,10 @@
-import 'package:apuntes/datasource/note_datasource.dart';
-import 'package:apuntes/datasource/user_datasource.dart';
-import 'package:apuntes/entities/index.dart';
-import 'package:apuntes/errors/custom_error.dart';
-import 'package:apuntes/models/http_upload_request_model.dart';
-import 'package:apuntes/provider/auth_provider.dart';
-import 'package:apuntes/services/apis/descargar_datos.dart';
-import 'package:apuntes/services/apis/subir_data.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:apuntes/datasource/datasources.dart';
+import 'package:apuntes/entities/entities.dart';
+import 'package:apuntes/errors/custom_error.dart';
+import 'package:apuntes/models/models.dart';
+import 'package:apuntes/provider/providers.dart';
+import 'package:apuntes/services/services.dart';
 
 part 'sync_provider.g.dart';
 

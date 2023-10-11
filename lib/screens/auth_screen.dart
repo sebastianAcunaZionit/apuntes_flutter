@@ -1,9 +1,7 @@
-import 'package:apuntes/provider/forms/auth_form_provider.dart';
-import 'package:apuntes/provider/sync_provider.dart';
-import 'package:apuntes/widgets/custom_container.dart';
-import 'package:apuntes/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:apuntes/provider/providers.dart';
+import 'package:apuntes/widgets/widgets.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});

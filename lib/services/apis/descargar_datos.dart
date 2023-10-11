@@ -1,7 +1,7 @@
-import 'package:apuntes/config/const/environment.dart';
-import 'package:apuntes/errors/custom_error.dart';
-import 'package:apuntes/models/http_download_response_model.dart';
 import 'package:dio/dio.dart';
+import 'package:apuntes/config/configs.dart';
+import 'package:apuntes/errors/custom_error.dart';
+import 'package:apuntes/models/models.dart';
 
 class DownloadData {
   final Dio dio = Dio(BaseOptions(baseUrl: "${Environment.apiUrl}/backend"));
@@ -10,7 +10,6 @@ class DownloadData {
     try {
       final data = await dio.get('/lista_usuarios.php');
       final userList = data.data["usuarios"];
-      print(userList);
       final response = HttpDownloadResponseModel(users: userList);
       return response;
     } on DioException catch (e) {

@@ -1,9 +1,8 @@
-import 'package:apuntes/config/const/environment.dart';
-import 'package:apuntes/config/const/jwt.dart';
-import 'package:apuntes/datasource/user_datasource.dart';
-import 'package:apuntes/entities/index.dart';
-import 'package:apuntes/services/key_value_storage_service_impl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:apuntes/config/configs.dart';
+import 'package:apuntes/datasource/datasources.dart';
+import 'package:apuntes/entities/entities.dart';
+import 'package:apuntes/services/services.dart';
 part 'auth_provider.g.dart';
 
 @Riverpod(keepAlive: true)

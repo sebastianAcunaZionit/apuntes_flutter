@@ -1,10 +1,9 @@
-import 'package:apuntes/config/router/app_router.dart';
-import 'package:apuntes/entities/index.dart';
-import 'package:apuntes/provider/forms/note_form_provider.dart';
-import 'package:apuntes/provider/note_provider.dart';
-import 'package:apuntes/widgets/custom_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:apuntes/config/configs.dart';
+import 'package:apuntes/entities/entities.dart';
+import 'package:apuntes/provider/providers.dart';
+import 'package:apuntes/widgets/widgets.dart';
 
 class NoteItem extends ConsumerStatefulWidget {
   final Note note;

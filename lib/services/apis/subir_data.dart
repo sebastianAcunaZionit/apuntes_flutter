@@ -1,8 +1,7 @@
-import 'package:apuntes/config/const/environment.dart';
-import 'package:apuntes/errors/custom_error.dart';
-import 'package:apuntes/models/http_upload_request_model.dart';
-import 'package:apuntes/models/http_upload_response_model.dart';
 import 'package:dio/dio.dart';
+import 'package:apuntes/config/configs.dart';
+import 'package:apuntes/errors/custom_error.dart';
+import 'package:apuntes/models/models.dart';
 
 class UploadData {
   final Dio dio = Dio(BaseOptions(baseUrl: "${Environment.apiUrl}/backend"));

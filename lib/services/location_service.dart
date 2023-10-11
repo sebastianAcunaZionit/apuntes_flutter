@@ -1,8 +1,8 @@
 import 'dart:async';
+import 'package:geolocator/geolocator.dart';
 
 import 'package:apuntes/errors/custom_error.dart';
-import 'package:apuntes/provider/location_provider.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:apuntes/provider/providers.dart';
 
 class LocationService {
   Future<bool> isLocationEnabled() async {

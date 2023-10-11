@@ -1,5 +1,5 @@
-import 'package:apuntes/services/location_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:apuntes/services/services.dart';
 
 part 'location_provider.g.dart';
 

@@ -1,4 +1,4 @@
-import 'package:apuntes/entities/user.dart';
+import 'package:apuntes/entities/entities.dart';
 
 class UserMapper {
   static User mapToEntity(Map<String, dynamic> json) => User(

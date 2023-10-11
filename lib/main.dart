@@ -1,9 +1,7 @@
-import 'package:apuntes/config/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import 'config/const/environment.dart';
+import 'package:apuntes/config/configs.dart';
 
 void main() async {
   await Environment.initEnvironment();
