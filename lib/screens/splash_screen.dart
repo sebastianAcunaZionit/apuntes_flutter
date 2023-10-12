@@ -13,14 +13,12 @@ class SplashScreen extends ConsumerStatefulWidget {
 class SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   void initState() {
-    Future(() => ref.read(locationProvProvider.notifier).onCheckStatus());
-
     super.initState();
+    Future(() => ref.read(authProvider.notifier).checkAuthStatus());
   }
 
   @override
   Widget build(BuildContext context) {
-    Future(() => ref.read(authProvider.notifier).checkAuthStatus());
     print("render splash");
     return Scaffold(
         body: Center(

@@ -31,7 +31,7 @@ class Auth extends _$Auth {
   }
 
   checkAuthStatus() async {
-    state = state.copyWith(authStatus: AuthStatus.authenticating);
+    // state = state.copyWith(authStatus: AuthStatus.authenticating);
     await Future.delayed(const Duration(seconds: 2));
     final token =
         await keyValueStorageService.getValue<String>(Environment.tokenName);

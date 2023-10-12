@@ -17,6 +17,7 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
   @override
   void initState() {
     super.initState();
+    Future(() => ref.read(locationProvProvider.notifier).onCheckStatus());
     Future(() => ref.read(noteProvProvider.notifier).loadData(widget.uid));
   }
 

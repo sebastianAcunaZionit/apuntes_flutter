@@ -23,14 +23,15 @@ GoRouter appRouter(AppRouterRef ref) {
     ],
     redirect: (context, state) {
       final isGointTo = state.matchedLocation;
+      print(authProv.authStatus);
+      print(isGointTo);
+
+      if (isGointTo == '/splash') {
+        if (authProv.authStatus == AuthStatus.authenticated) return '/';
+      }
 
       if (authProv.authStatus == AuthStatus.notAuthenticated) {
         return '/login';
-      }
-
-      if (isGointTo == '/splash') {
-        if (authProv.authStatus == AuthStatus.notAuthenticated) return '/login';
-        if (authProv.authStatus == AuthStatus.authenticated) return '/';
       }
 
       return null;

@@ -3,11 +3,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:apuntes/provider/providers.dart';
 import 'package:apuntes/widgets/widgets.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  LoginScreenState createState() => LoginScreenState();
+}
+
+class LoginScreenState extends ConsumerState<LoginScreen> {
+  @override
+  void initState() {
+    Future(() => ref.read(locationProvProvider.notifier).onCheckStatus());
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.listen(authFormProvider, (previous, next) {
       if (next.authFormStatus == AuthFormStatus.errored) {
         ScaffoldMessenger.of(context)

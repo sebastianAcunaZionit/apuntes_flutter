@@ -3,7 +3,7 @@ import 'package:apuntes/services/services.dart';
 
 part 'location_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: true)
 class LocationProv extends _$LocationProv {
   LocationService locationService = LocationService();
 
