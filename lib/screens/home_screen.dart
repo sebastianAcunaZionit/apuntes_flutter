@@ -75,6 +75,14 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           });
     }
 
+    ref.listen(syncProvProvider, (previous, next) {
+      if (next.syncStatus == SyncStatus.errored &&
+          next.errorMessage.isNotEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(next.errorMessage)));
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
