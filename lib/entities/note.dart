@@ -16,6 +16,8 @@ class Note {
   final int createdBy;
   final DateTime updatedAt;
   final int updatedBy;
+  final String address;
+  final String updatedAddress;
   @enumerated
   SyncDataStatus syncState;
 
@@ -28,6 +30,8 @@ class Note {
     required this.createdAt,
     required this.createdBy,
     required this.syncState,
+    required this.address,
+    required this.updatedAddress,
     this.updatedCoordenates = const [],
     required this.updatedAt,
     this.updatedBy = 0,

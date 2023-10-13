@@ -26,6 +26,8 @@ GoRouter appRouter(AppRouterRef ref) {
       print(authProv.authStatus);
       print(isGointTo);
 
+      print(authProv.user?.id);
+
       if (isGointTo == '/splash') {
         if (authProv.authStatus == AuthStatus.authenticated) return '/';
       }

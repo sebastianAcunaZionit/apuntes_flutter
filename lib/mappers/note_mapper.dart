@@ -18,6 +18,8 @@ class NoteMapper {
           : "",
       "fecha_hora_modifica": note.updatedAt.toString(),
       "id_user_mod": note.updatedBy,
+      "direccion_orig": note.address,
+      "direccion_mod": note.updatedAddress,
     };
   }
 }

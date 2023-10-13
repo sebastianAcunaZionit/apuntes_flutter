@@ -28,7 +28,7 @@ class NoteScreenState extends ConsumerState<NoteScreen> {
 
     // print("render note_screen");
 
-    // print(ref.watch(noteProvProvider));
+    print(ref.watch(noteProvProvider));
     if (ref.watch(locationProvProvider).locationStatus ==
         LocationStatus.requesting) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 import 'package:apuntes/errors/custom_error.dart';
 import 'package:apuntes/provider/providers.dart';
@@ -34,11 +35,37 @@ class LocationService {
   Future<Position> getLocation() async {
     try {
       final position = await Geolocator.getCurrentPosition();
+
       return position;
     } on TimeoutException catch (e) {
       throw CustomError("no se pudo obtener la locacion ${e.message}");
     } catch (e) {
       throw CustomError("error no controlado");
+    }
+  }
+
+  Future<String> getAddress(Position position) async {
+    final address = await _getAddressFromCoordinates(position);
+    return address;
+  }
+
+  Future<String> _getAddressFromCoordinates(Position position) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(
+        position.latitude,
+        position.longitude,
+      );
+
+      if (placemarks.isEmpty) {
+        return "Dirección no encontrada";
+      }
+
+      Placemark placemark = placemarks[0];
+      String formattedAddress =
+          "${placemark.street}, ${placemark.locality}, ${placemark.country}";
+      return formattedAddress;
+    } catch (e) {
+      return "Error al obtener la dirección: $e";
     }
   }
 }

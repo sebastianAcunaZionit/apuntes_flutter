@@ -19,9 +19,12 @@ class LocationProv extends _$LocationProv {
   onLocationService() async {
     final position = await locationService.getLocation();
 
+    final address = await locationService.getAddress(position);
+
     state = state.copyWith(
       latitude: position.latitude.toString(),
       longitude: position.longitude.toString(),
+      address: address,
     );
   }
 

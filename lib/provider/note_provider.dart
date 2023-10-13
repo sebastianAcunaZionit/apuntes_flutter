@@ -19,6 +19,7 @@ class NoteProv extends _$NoteProv {
     final noteRepo = NoteDatasource();
     if (uid == "new") {
       state = state.copyWith(
+        id: const Uuid().v4(),
         createdBy: ref.read(authProvider).user?.id ?? 1,
         createdAt: DateTime.timestamp().toString(),
       );
@@ -57,15 +58,18 @@ class NoteProv extends _$NoteProv {
       ref.watch(locationProvProvider).latitude,
       ref.watch(locationProvProvider).longitude
     ];
+    final address = ref.watch(locationProvProvider).address;
 
     final noteLike = Note(
       isarId: state.isarId,
-      id: const Uuid().v4(),
+      id: state.id,
       name: name,
       note: note,
       coordenates:
           (state.coordenates.isEmpty) ? newCoordenates : state.coordenates,
+      address: (state.address.isEmpty) ? address : state.address,
       updatedCoordenates: newCoordenates,
+      updatedAddress: address,
       createdAt: (state.createdAt.isEmpty)
           ? DateTime.now()
           : DateTime.parse(state.createdAt),
@@ -91,6 +95,8 @@ class NoteState {
   final int createdBy;
   final String updatedAt;
   final int updatedBy;
+  final String address;
+  final String updatedAddress;
 
   NoteState({
     this.isarId,
@@ -103,6 +109,8 @@ class NoteState {
     this.updatedCoordenates = const [],
     this.updatedAt = "",
     this.updatedBy = 0,
+    this.address = "",
+    this.updatedAddress = "",
   });
 
   NoteState copyWith({
@@ -116,6 +124,8 @@ class NoteState {
     List<String>? updatedCoordenates,
     String? updatedAt,
     int? updatedBy,
+    String? address,
+    String? updatedAddress,
   }) =>
       NoteState(
         isarId: isarId ?? this.isarId,
@@ -128,6 +138,8 @@ class NoteState {
         updatedCoordenates: updatedCoordenates ?? this.updatedCoordenates,
         updatedAt: updatedAt ?? this.updatedAt,
         updatedBy: updatedBy ?? this.updatedBy,
+        address: address ?? this.address,
+        updatedAddress: updatedAddress ?? this.updatedAddress,
       );
 
   @override
@@ -144,6 +156,8 @@ createdBy: $createdBy,
 updatedCoordenates: $updatedCoordenates, 
 updatedAt: $updatedAt, 
 updatedBy: $updatedBy, 
+address: $address, 
+updatedAddress: $updatedAddress, 
 
 
  """;
