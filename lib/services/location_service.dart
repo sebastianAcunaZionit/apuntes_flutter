@@ -65,7 +65,8 @@ class LocationService {
           "${placemark.street}, ${placemark.locality}, ${placemark.country}";
       return formattedAddress;
     } catch (e) {
-      return "Error al obtener la dirección: $e";
+      return "Sin internet para obtener dirección";
+      // return "Error al obtener la dirección: $e";
     }
   }
 }
